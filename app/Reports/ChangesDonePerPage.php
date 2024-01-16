@@ -10,13 +10,11 @@ use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 
 class ChangesDonePerPage extends EventQuery
 {
-    private Collection $allChanges;
+    private array $allChanges = [];
 
     public function __construct(
         private Period $period
     ) {
-        $this->allChanges = collect();
-
         EloquentStoredEvent::query()
             ->whereEvent(PageRevisionStored::class)
             ->whereDate(
@@ -34,15 +32,16 @@ class ChangesDonePerPage extends EventQuery
             );
     }
 
-    public function allChanges(): Collection
+    public function getAllChanges(): Collection
     {
-        return $this->allChanges;
+        return collect($this->allChanges);
     }
 
-    protected function applyPageStored(PageRevisionStored $event): void
+    protected function applyPageRevisionStored(PageRevisionStored $event): void
     {
-        $this->allChanges->push([
-            'changes' => $event->changedAttributes,
-        ]);
+        ray($event);
+        foreach ($event->changedAttributes as $attributeName => $attributeValue) {
+            $this->allChanges[$event->eventModelId] = array_merge($this->allChanges[$event->eventModelId] ?? [], [$attributeName => $attributeValue]);
+        }
     }
 }

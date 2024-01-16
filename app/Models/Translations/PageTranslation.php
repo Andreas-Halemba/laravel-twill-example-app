@@ -4,7 +4,6 @@ namespace App\Models\Translations;
 
 use A17\Twill\Models\Model;
 use App\Models\Page;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Translations\PageTranslation

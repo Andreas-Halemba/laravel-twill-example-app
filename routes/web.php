@@ -25,5 +25,5 @@ Route::get('reports/pages', function () {
         Period::create(Carbon::now()->subMinutes(5), Carbon::now())
     );
 
-    return response()->json($report->allChanges()->toArray());
+    return response()->json($report->getAllChanges());
 });
